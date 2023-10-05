@@ -4,8 +4,10 @@ Pet Care
 {% endblock title %}
 
 {% block style %}
-<title>Hostel Booking</title>
+<title>Appointement</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <style type="text/css">
     * {
         margin: 0;
@@ -36,7 +38,6 @@ Pet Care
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 3px;
-
     }
 
     section .div {
@@ -72,12 +73,12 @@ Pet Care
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 3px;
-
     }
+
     .column.image {
         text-align: center;
     }
-    
+
     .column.image img {
         max-width: 100%;  /* Make the image responsive */
         height: auto;  /* Maintain the image's aspect ratio */
@@ -85,7 +86,6 @@ Pet Care
         margin: 0 auto;  /* Center the image vertically */
         margin-left: 20px;
     }
-    
 
     .button {
         margin-top: 20px;
@@ -107,11 +107,9 @@ Pet Care
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
 {% endblock style %}
 
 {% block body %}
-
 <body>
     <section>
         <div class="column image">
@@ -119,7 +117,7 @@ Pet Care
         </div>
         <div class="div">
             <h2>Appointment Form</h2>
-            <form method="post" action="{% url 'hostelbooking' %}">
+            <form method="post" id="appointment-form" action="{% url 'hostelbooking' %}">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="fullname">Full Name</label>
@@ -151,6 +149,8 @@ Pet Care
             </form>
         </div>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var today = new Date();
@@ -158,10 +158,10 @@ Pet Care
             var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
             today = yyyy + '-' + mm + '-' + dd;
-        
+    
             document.getElementById('booking_date').value = today;
             document.getElementById('booking_date').min = today;
-        
+    
             // Set the minimum value for booking time to the current time
             var hours = String(today.getHours()).padStart(2, '0');
             var minutes = String(today.getMinutes()).padStart(2, '0');
@@ -169,45 +169,60 @@ Pet Care
             document.getElementById('booking_time').value = currentTime;
             document.getElementById('booking_time').min = currentTime;
         });
-        
+    
         // Add code to clear date and time fields on page refresh
         window.addEventListener('load', function () {
             document.getElementById('booking_date').value = '';
             document.getElementById('booking_time').value = '';
         });
-        
-         // Phone number validation
-    document.getElementById('phonenumber').addEventListener('input', function () {
-        var phoneInput = this.value;
-        var phoneError = document.getElementById('phone-error');
-        var submitButton = document.getElementById('submit-button');
-
-        // Check if the phone number has exactly 10 digits
-        if (/^\d{10}$/.test(phoneInput)) {
-            phoneError.textContent = '';
-            submitButton.removeAttribute('disabled');
-        } else {
-            phoneError.textContent = 'Phone number must be 10 digits.';
-            submitButton.setAttribute('disabled', 'disabled');
-        }
-    });
-        
+    
+        // Phone number validation
+        document.getElementById('phonenumber').addEventListener('input', function () {
+            var phoneInput = this.value;
+            var phoneError = document.getElementById('phone-error');
+            var submitButton = document.getElementById('submit-button');
+    
+            // Check if the phone number has exactly 10 digits
+            if (/^\d{10}$/.test(phoneInput)) {
+                phoneError.textContent = '';
+                submitButton.removeAttribute('disabled');
+            } else {
+                phoneError.textContent = 'Phone number must be 10 digits.';
+                submitButton.setAttribute('disabled', 'disabled');
+            }
+        });
+    
         // Time validation for booking time
         document.getElementById('booking_time').addEventListener('input', function () {
             var timeInput = this.value;
             // You can add validation logic for time (if needed)
         });
-         // Handle success message popup
-         const successMessage = '{{ success_message|escapejs }}';
-         if (successMessage) {
-             Swal.fire({
-                 title: successMessage,
-                 icon: 'success',
-                 timer: 3000,
-                 timerProgressBar: true,
-                 showConfirmButton: false
-             });
-         }
+    
+       // Handle form submission using jQuery
+    $('#appointment-form').on('submit', function (e) {
+        e.preventDefault();  // Prevent the default form submission
+
+        // Simulate a successful form submission
+        Swal.fire({
+            title: 'Booking in progress...',
+            icon: 'info',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        }).then(() => {
+            Swal.fire({
+                title: 'Appointment successfully booked!',
+                icon: 'success',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                // Submit the form after showing the success message
+                $(this).off('submit').submit();
+            });
+        });
+    });
+
     </script>
 </body>
 {% endblock body %}

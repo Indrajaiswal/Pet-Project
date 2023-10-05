@@ -52,7 +52,7 @@ def Hostelbooking(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Booking successfully created.')
-            return redirect('hostelbooking')
+            return redirect('services')
         else:
             messages.error(request, 'Please correct the phone number.')
     else:
@@ -120,6 +120,7 @@ def Registerpage(request):
             return redirect('login')
         
     return render (request,'register.html')     
+
 
 def payment(request):
     return render(request, 'payment.html')
