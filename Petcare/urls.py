@@ -37,6 +37,7 @@ urlpatterns = [
     path("food/",views.Food,name='food'),
     path("hostelbooking/",views.Hostelbooking,name='hostelbooking'),
     path("appointment/",views.Appointement,name='appointment'),
+    path("payment/",views.payment,name='payment')
 
 
 ]

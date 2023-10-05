@@ -121,6 +121,8 @@ def Registerpage(request):
         
     return render (request,'register.html')     
 
+def payment(request):
+    return render(request, 'payment.html')
 
 def LogoutPage(request):
     logout(request)
