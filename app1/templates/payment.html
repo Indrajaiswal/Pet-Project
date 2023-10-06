@@ -18,9 +18,15 @@
         <input type="text" id="ownerName" name="ownerName" required />
         <br /><br />
 
-        <label for="insuranceName">Insurance Name:</label>
-        <input type="text" id="insuranceName" name="insuranceName" required />
-        <br /><br />
+        <label for="ownerName">Insurance Name:</Namelabel><br> 
+        <input type="radio" id="lifeTime" name="insurance" value="LifeTime">
+        <label for="lifetime">Life Time</label><br>
+
+        <input type="radio" id="annual" name="insurance" value="Annual">
+        <label for="annual">Annual</label><br>
+
+        <input type="radio" id="accident" name="insurance" value="Accident ">
+        <label for="accident">Accident Only</label><br /><br />
 
         <label for="startDate">Start Date:</label>
         <input type="date" id="startDate" name="startDate" required min="{{ today }}" />
