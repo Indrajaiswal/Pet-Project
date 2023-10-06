@@ -2,6 +2,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.core.validators import RegexValidator
 
+
 # Create your models here.
 class Contact(models.Model):
     name = models.CharField(max_length=100)
@@ -54,3 +55,26 @@ class Hostelbooking(models.Model):
 
     def __str__(self):
         return f'Booking for {self.petname} on {self.booking_from} '
+    
+
+class Registration(models.Model):
+    username = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  # Store the hashed password
+
+    def __str__(self):
+        return self.username
+    
+
+# models.py
+from django.db import models
+
+class PetInsurance(models.Model):
+    pet_name = models.CharField(max_length=100)
+    owner_name = models.CharField(max_length=100)
+    insurance_name = models.CharField(max_length=100)
+    start_date = models.DateField()
+    # Add any other fields you might need
+
+    def __str__(self):
+        return self.pet_name

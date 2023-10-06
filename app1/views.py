@@ -4,10 +4,12 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from app1.models import PetInsurance
 from .forms import BookingForm
 from .forms import HostelForm
 from .forms import ContactForm
@@ -156,3 +158,59 @@ def LogoutPage(request):
     logout(request)
     return redirect('home')
     
+
+
+
+# views.py
+from django.shortcuts import render, redirect
+from .forms import PetInsuranceForm
+
+
+from django.http import JsonResponse
+
+# def process_payment(request):
+#     if request.method == 'POST' and request.is_ajax():
+#         pet_name = request.POST.get('petName')
+#         owner_name = request.POST.get('ownerName')
+#         insurance_name = request.POST.get('insuranceName')
+#         start_date = request.POST.get('startDate')
+        
+#         # Create a new PetInsurance object and save it to the database
+#         pet_insurance = PetInsurance(pet_name=pet_name, owner_name=owner_name, insurance_name=insurance_name, start_date=start_date)
+#         pet_insurance.save()
+        
+#         return JsonResponse({'status': 'success'})
+
+#     return JsonResponse({'status': 'error'})
+
+from django.http import JsonResponse
+
+
+def process_payment(request):
+    if request.method == 'POST':
+        form = PetInsuranceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            print(form.errors)
+            return JsonResponse({'status': 'error'})
+    return JsonResponse({'status': 'error'})
+
+# def process_payment(request):
+#     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+#         pet_name = request.POST.get('petName')
+#         owner_name = request.POST.get('ownerName')
+#         insurance_name = request.POST.get('insuranceName')
+#         start_date = request.POST.get('startDate')
+
+#         # Create a new PetInsurance object and save it to the database
+#         pet_insurance = PetInsurance(pet_name=pet_name, owner_name=owner_name, insurance_name=insurance_name, start_date=start_date)
+#         pet_insurance.save()
+
+#         return JsonResponse({'status': 'success'})
+
+#     return JsonResponse({'status': 'error'})
+
+# def process_payment(request):
+#     print(request.POST)  # Add this line for debugging

@@ -37,7 +37,9 @@ urlpatterns = [
     path("food/",views.Food,name='food'),
     path("hostelbooking/",views.Hostelbooking,name='hostelbooking'),
     path("appointment/",views.Appointement,name='appointment'),
-    path("payment/",views.payment,name='payment')
+    path("payment/",views.payment,name='payment'),
+    # urls.py
+    path('process_payment/', views.process_payment, name='process_payment')
 
 
 ]
