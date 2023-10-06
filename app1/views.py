@@ -13,6 +13,8 @@ from .forms import HostelForm
 from .forms import ContactForm
 from django.contrib import messages
 
+import re
+
 # Create your views here.
 
 def servicepage(request):
@@ -104,22 +106,47 @@ def LoginPage(request):
 
     return render (request,'login.html')
 
+
 def Registerpage(request):
-    if request.method=='POST':
-        uname=request.POST.get('username')
-        email=request.POST.get('email')
-        pass1=request.POST.get('password1')
-        pass2=request.POST.get('password2')
+    def is_strong_password(password):
+        # Check for at least 8 characters
+        if len(password) < 8:
+            return False
 
-        if pass1!=pass2:
-            return HttpResponse("Your password and confrom password are not Same!!")
+        # Check for at least one uppercase letter
+        if not any(char.isupper() for char in password):
+            return False
+
+        # Check for at least one lowercase letter
+        if not any(char.islower() for char in password):
+            return False
+
+        # Check for at least one digit
+        if not any(char.isdigit() for char in password):
+            return False
+
+        # Check for the presence of a special character (symbol)
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            return False
+
+        return True
+
+    if request.method == 'POST':
+        uname = request.POST.get('username')
+        email = request.POST.get('email')
+        pass1 = request.POST.get('password1')
+        pass2 = request.POST.get('password2')
+
+        if pass1 != pass2:
+            return HttpResponse("Your password and confirm password are not the same!!")
+        elif not is_strong_password(pass1):
+            return HttpResponse("Your password does not meet the strength criteria. It should include a combination of uppercase letters, lowercase letters, numbers, and symbols.")
         else:
-
-            my_user=User.objects.create_user(uname,email,pass1)
+            my_user = User.objects.create_user(uname, email, pass1)
             my_user.save()
             return redirect('login')
-        
-    return render (request,'register.html')     
+
+    return render(request, 'register.html')
 
 
 def payment(request):
